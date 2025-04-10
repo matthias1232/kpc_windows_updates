@@ -72,7 +72,7 @@ try
         {
             if ($lastupdate.Date -and $lastupdate.Title -and $lastupdate.Title -notlike "*Intelligence[ -]Update*" -and $lastupdatelistcounter -lt 80 )
             {
-                $lastupdatelist = $lastupdatelist + $lastupdate.Date + " " + $lastupdate.Title + "XXXNEWLINEXXX"
+                $lastupdatelist = $lastupdatelist + $lastupdate.Date.tostring("yyyy-MM-dd hh:mm:ss") + " " + $lastupdate.Title + "XXXNEWLINEXXX"
                 if($lastupdateinstalldate -eq "")
                 {
                     $lastupdateinstalldate = $lastupdate.Date
@@ -84,10 +84,9 @@ try
 
     if ($lastupdateinstalldate)
     {
-        $lastupdateinstalldate = $lastupdateinstalldate
         $lastupdateinstalldays = New-TimeSpan -Start $lastupdateinstalldate -End $now
         $lastupdateinstalldays = $lastupdateinstalldays.Days
-        
+        $lastupdateinstalldate = $lastupdateinstalldate.tostring("yyyy-MM-dd hh:mm:ss")
     }
     else
     {
@@ -119,6 +118,7 @@ try
             $rebootrequiredsinchours = New-TimeSpan -Start $rebootrequiredsince -End $now
             $rebootrequiredsinchours = $rebootrequiredsinchours.TotalHours
             $rebootrequiredsinchours = [Math]::Truncate($rebootrequiredsinchours)
+            $rebootrequiredsince = $rebootrequiredsince.tostring("yyyy-MM-dd hh:mm:ss")
         }
         else
         {
