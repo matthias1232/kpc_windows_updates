@@ -70,7 +70,7 @@ try
     
         foreach ($lastupdate in $updatehistory)
         {
-            if ($lastupdate.Date -and $lastupdate.Title -and $lastupdate.Title -notlike "*Intelligence-Update*" -and $lastupdate.Title -notlike "*Intelligence Update*" -and $lastupdatelistcounter -lt 80 )
+            if ($lastupdate.Date -and $lastupdate.Title -and $lastupdate.Title -notlike "*Intelligence[ -]Update*" -and $lastupdatelistcounter -lt 80 )
             {
                 $lastupdatelist = $lastupdatelist + $lastupdate.Date + " " + $lastupdate.Title + "XXXNEWLINEXXX"
                 if($lastupdateinstalldate -eq "")
@@ -175,12 +175,12 @@ try
             $Updatetitle = $Update.Title
             $Updatetitle = $Updatetitle -replace "`n|`r"
 
-            if ($Update.AutoSelectOnWebSites -eq "True" -and $Update.Title -notlike "*Intelligence-Update*" -and $Update.Title -notlike "*Intelligence Update*")
+            if ($Update.AutoSelectOnWebSites -eq "True" -and $Update.Title -notlike "*Intelligence[ -]Update*")
             {
                 $important1updates = $important1updates + $Updatetitle + "XXXNEWLINEXXX"
                 $important1count++
             }            
-            if ($Update.AutoSelectOnWebSites -ne "True" -or $Update.Title -like "*Intelligence-Update*" -or $Update.Title -like "*Intelligence Update*")
+            if ($Update.AutoSelectOnWebSites -ne "True" -or $Update.Title -like "*Intelligence[ -]Update*")
             {
                 $Optionalupdates = $Optionalupdates + $Updatetitle + "XXXNEWLINEXXX"
                 $Optionalcount++
