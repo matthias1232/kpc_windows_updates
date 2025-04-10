@@ -36,7 +36,13 @@ from cmk.gui.plugins.wato import (
    HostRulespec,
    rulespec_registry,
 )
-from cmk.gui.cee.plugins.wato.agent_bakery.rulespecs.utils import RulespecGroupMonitoringAgentsAgentPlugins
+try:
+    from cmk.gui.cee.plugins.wato.agent_bakery.rulespecs.utils import (
+        RulespecGroupMonitoringAgentsAgentPlugins
+    )
+except Exception:
+    RulespecGroupMonitoringAgentsAgentPlugins = None
+
 from cmk.gui.valuespec import (
    Age,
    Dictionary,
@@ -56,9 +62,10 @@ def _valuespec_windows_updates_kpc():
     )
 
 
-rulespec_registry.register(
-   HostRulespec(
-      group=RulespecGroupMonitoringAgentsAgentPlugins,
-      name="agent_config:windows_updates_kpc",
-      valuespec=_valuespec_windows_updates_kpc,
-   ))
+if RulespecGroupMonitoringAgentsAgentPlugins is not None:
+    rulespec_registry.register(
+       HostRulespec(
+          group=RulespecGroupMonitoringAgentsAgentPlugins,
+          name="agent_config:windows_updates_kpc",
+          valuespec=_valuespec_windows_updates_kpc,
+       ))
