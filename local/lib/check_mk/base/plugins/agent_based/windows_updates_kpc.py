@@ -216,9 +216,9 @@ def check_windows_updates_kpc(item, params, section):
              state = State.WARN
         if int(Importantcount) >= int(importantcrit) and importantenabled == 'Enabled':
              state = State.CRIT
-        if int(Moderatecount) >= int(moderatewarn) and state != State.CRIT and moderatenabled == 'Enabled':
+        if int(Moderatecount) >= int(moderatewarn) and state != State.CRIT and moderateenabled == 'Enabled':
              state = State.WARN
-        if int(Moderatecount) >= int(moderatecrit) and moderatenabled == 'Enabled':
+        if int(Moderatecount) >= int(moderatecrit) and moderateenabled == 'Enabled':
              state = State.CRIT
         if int(Lowcount) >= int(lowwarn) and state != State.CRIT and lowenabled == 'Enabled':
              state = State.WARN
