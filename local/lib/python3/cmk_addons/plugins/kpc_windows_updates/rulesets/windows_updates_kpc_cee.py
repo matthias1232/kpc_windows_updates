@@ -47,7 +47,7 @@ from cmk.rulesets.v1.rule_specs import AgentConfig, Topic
 
 def _valuespec_windows_updates_kpc():
     return Dictionary(
-        title=Title("Windows Patch Day (Windows)"),
+        title=Title("Windows Updates (Agent Plugin)"),
         help_text=Help(
             "This will deploy the agent plugin <tt>windows_updates_kpc.ps1</tt> for checking for available Windows Updates"
         ),
