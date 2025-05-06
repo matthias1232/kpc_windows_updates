@@ -31,50 +31,42 @@
 #
 ################################################################################################################
 
-from cmk.gui.i18n import _
-
-# import required to register agent
-from cmk.gui.plugins.wato import (
-    rulespec_registry,
-    HostRulespec,
-    CheckParameterRulespecWithoutItem,
-    RulespecGroupCheckParametersOperatingSystem
-)
-
-from cmk.gui.valuespec import (
-    FixedValue,
-    TextInput,
-    Age,
-    ListOfStrings,
-    DropdownChoice,
-    Tuple,
+from cmk.rulesets.v1 import Title, Label, Help
+from cmk.rulesets.v1.form_specs import (
+    BooleanChoice,
+    DefaultValue,
+    DictElement,
+    Dictionary,
     Integer,
+    MatchingScope,
+    RegularExpression,
+    List,
 )
-
-# import structure where special agent will be registered
-from cmk.gui.plugins.wato.datasource_programs import RulespecGroupDatasourcePrograms
+from cmk.rulesets.v1.rule_specs import AgentConfig, Topic
 
 
-
- 
-def _parameter_valuespec_windows_updates_kpc_windows_lastupdateinstalldate():
+def _valuespec_windows_updates_kpc():
     return Dictionary(
-        elements=[
-            ("warning_lower", Tuple(
-                title=_("Levels for Windows Update History"),
-                elements=[
-                    Integer(title=_("Warning if the last update installation is more than X days ago"), default_value=30),
-                    Integer(title=_("Critical if the last update installation is more than X days ago"), default_value=50),
-                ],
-            )),
-        ],
+        title=Title("Windows Patch Day (Windows)"),
+        help_text=Help(
+            "This will deploy the agent plugin <tt>windows_updates_kpc.ps1</tt> for checking for available Windows Updates"
+        ),
+        elements={
+            "deploy": DictElement(
+                parameter_form=BooleanChoice(
+                    label=Label("Deploy plugin for Windows Updates"),
+                ),
+                required=True,
+            ),
+        },
     )
-   
-        
-rulespec_registry.register(
-CheckParameterRulespecWithoutItem(
-check_group_name="windows_updates_kpc_windows_lastupdateinstalldate",
-group=RulespecGroupCheckParametersOperatingSystem,
-parameter_valuespec=_parameter_valuespec_windows_updates_kpc_windows_lastupdateinstalldate,
-title=lambda: _("Windows Updates History"),
-))
+
+
+
+
+rule_spec_agent_config_windows_updates_kpc = AgentConfig(
+    title=Title("Windows Updates (Agent Plugin)"),
+    topic=Topic.WINDOWS,
+    name="windows_updates_kpc",
+    parameter_form=_valuespec_windows_updates_kpc,
+)

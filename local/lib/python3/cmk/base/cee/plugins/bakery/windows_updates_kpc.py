@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-#
 #This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the #License, or (at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU #General Public License for more details.
@@ -31,41 +30,19 @@
 #
 ################################################################################################################
 
-from cmk.gui.i18n import _
-from cmk.gui.plugins.wato import (
-   HostRulespec,
-   rulespec_registry,
+from pathlib import Path
+from cmk.base.plugins.bakery.bakery_api.v1 import FileGenerator, OS, Plugin, PluginConfig, register
+from typing import Any, Dict
+    
+def get_windows_updates_kpc_files(conf: Dict[str, Any]) -> FileGenerator:
+    """generate cfg and insert ps1 script into agent"""
+
+    if not conf.get("deploy"):
+        return
+
+    yield Plugin(base_os=OS.WINDOWS, source=Path("windows_updates_kpc.ps1"), interval=10800, timeout=3600, asynchronous=True)
+
+register.bakery_plugin(
+    name="windows_updates_kpc",
+    files_function=get_windows_updates_kpc_files,
 )
-try:
-    from cmk.gui.cee.plugins.wato.agent_bakery.rulespecs.utils import (
-        RulespecGroupMonitoringAgentsAgentPlugins
-    )
-except Exception:
-    RulespecGroupMonitoringAgentsAgentPlugins = None
-
-from cmk.gui.valuespec import (
-   Age,
-   Dictionary,
-   TextAscii,
-   DropdownChoice,
-)
-
-def _valuespec_windows_updates_kpc():
-    return DropdownChoice(
-        title=_('Windows Updates (Agent Plugin)'),
-        help=_('This will deploy the agent plugin <tt>windows_updates_kpc.ps1</tt> '
-               'for checking for available Windows Updates'),
-        choices=[
-            (True, _('Deploy plugin for Windows Updates')),
-            (None, _('Do not deploy plugin for Windows Updates')),
-        ],
-    )
-
-
-if RulespecGroupMonitoringAgentsAgentPlugins is not None:
-    rulespec_registry.register(
-       HostRulespec(
-          group=RulespecGroupMonitoringAgentsAgentPlugins,
-          name="agent_config:windows_updates_kpc",
-          valuespec=_valuespec_windows_updates_kpc,
-       ))

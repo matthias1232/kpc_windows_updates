@@ -33,7 +33,7 @@
 #<<<windows_updates_kpc:sep(9):encoding(cp437)>>>
 #Windows Updates	0	5	0	0	0	0	5	-	Security Intelligence Update for Microsoft Defender Antivirus - KB2267602 (Version 1.391.4146.0)XXXNEWLINEXXXINTEL - System - 1/1/1970 12:00:00 AM - 10.1.1.42XXXNEWLINEXXXINTEL - System - 1/1/1970 12:00:00 AM - 10.1.1.42XXXNEWLINEXXXINTEL - System - 1/1/1970 12:00:00 AM - 10.1.1.42XXXNEWLINEXXXINTEL - System - 1/1/1970 12:00:00 AM - 10.1.1.42XXXNEWLINEXXX	-		-	-	Security Intelligence Update for Microsoft Defender Antivirus - KB2267602 (Version 1.391.4146.0)XXXNEWLINEXXXINTEL - System - 1/1/1970 12:00:00 AM - 10.1.1.42XXXNEWLINEXXXINTEL - System - 1/1/1970 12:00:00 AM - 10.1.1.42XXXNEWLINEXXXINTEL - System - 1/1/1970 12:00:00 AM - 10.1.1.42XXXNEWLINEXXXINTEL - System - 1/1/1970 12:00:00 AM - 10.1.1.42XXXNEWLINEXXX
 
-from .agent_based_api.v1 import *
+from cmk.agent_based.v2 import *
 import pprint
 from datetime import datetime, timedelta
 
@@ -45,34 +45,99 @@ def discover_windows_updates_kpc(section):
 
 def check_windows_updates_kpc(item, params, section):
     
-    important1warn = params["levels_important1"][0]
-    important1crit = params["levels_important1"][1]
-    important1enabled = params["levels_important1"][2]
-    optionalwarn = params["levels_optional"][0]
-    optionalcrit = params["levels_optional"][1]
-    optionalenabled = params["levels_optional"][2]    
-    mandatorywarn = params["levels_mandatory"][0]
-    mandatorycrit = params["levels_mandatory"][1]
-    mandatoryenabled = params["levels_mandatory"][2]
-    criticalwarn = params["levels_critical"][0]
-    criticalcrit = params["levels_critical"][1]
-    criticalenabled = params["levels_critical"][2]
-    importantwarn = params["levels_important"][0]
-    importantcrit = params["levels_important"][1]
-    importantenabled = params["levels_important"][2]
-    moderatewarn = params["levels_moderate"][0]
-    moderatecrit = params["levels_moderate"][1]
-    moderateenabled = params["levels_moderate"][2]
-    lowwarn = params["levels_low"][0]
-    lowcrit = params["levels_low"][1]
-    lowenabled = params["levels_low"][2]
-    unspecifiedwarn = params["levels_unspecified"][0]
-    unspecifiedcrit = params["levels_unspecified"][1]
-    unspecifiedenabled = params["levels_unspecified"][2]
-    pendingrebootwarn = params["levels_pendingreboot"][0]
-    pendingrebootcrit = params["levels_pendingreboot"][1]
-    pendingrebootenabled = params["levels_pendingreboot"][2]
+    #print(params)
+    
+    important1enabled = params["levels_important1"][0]
+    if important1enabled == 'fixed':
+          important1warn = params["levels_important1"][1][0]
+          important1crit = params["levels_important1"][1][1]
+          important1enabled = 'Enabled'
+    else:
+          important1warn = 9999999999999999
+          important1crit = 9999999999999999
+          important1enabled = 'Disabled'
 
+    optionalenabled = params["levels_optional"][0]
+    if optionalenabled == 'fixed':
+          optionalwarn = params["levels_optional"][1][0]
+          optionalcrit = params["levels_optional"][1][1]
+          optionalenabled = 'Enabled'
+    else:
+          optionalwarn = 9999999999999999
+          optionalcrit = 9999999999999999
+          optionalenabled = 'Disabled'
+
+    mandatoryenabled = params["levels_mandatory"][0]
+    if mandatoryenabled == 'fixed':
+          mandatorywarn = params["levels_mandatory"][1][0]
+          mandatorycrit = params["levels_mandatory"][1][1]
+          mandatoryenabled = 'Enabled'
+    else:
+          mandatorywarn = 9999999999999999
+          mandatorycrit = 9999999999999999
+          mandatoryenabled = 'Disabled'
+
+
+    criticalenabled = params["levels_critical"][0]
+    if criticalenabled == 'fixed':
+          criticalwarn = params["levels_critical"][1][0]
+          criticalcrit = params["levels_critical"][1][1]
+          criticalenabled = 'Enabled'
+    else:
+          criticalwarn = 9999999999999999
+          criticalcrit = 9999999999999999
+          criticalenabled = 'Disabled'    
+          
+    importantenabled = params["levels_important"][0]
+    if importantenabled == 'fixed':
+          importantwarn = params["levels_important"][1][0]
+          importantcrit = params["levels_important"][1][1]
+          importantenabled = 'Enabled'
+    else:
+          importantwarn = 9999999999999999
+          importantcrit = 9999999999999999
+          importantenabled = 'Disabled' 
+              
+    moderateenabled = params["levels_moderate"][0]
+    if moderateenabled == 'fixed':
+          moderatewarn = params["levels_moderate"][1][0]
+          moderatecrit = params["levels_moderate"][1][1]
+          moderateenabled = 'Enabled'
+    else:
+          moderatewarn = 9999999999999999
+          moderatecrit = 9999999999999999 
+          moderateenabled = 'Disabled'
+          
+    lowenabled = params["levels_low"][0]
+    if lowenabled == 'fixed':
+          lowwarn = params["levels_low"][1][0]
+          lowcrit = params["levels_low"][1][1]
+          lowenabled = 'Enabled'
+    else:
+          lowwarn = 9999999999999999
+          lowcrit = 9999999999999999     
+          lowenabled = 'Disabled'
+          
+          
+    unspecifiedenabled = params["levels_unspecified"][0]
+    if unspecifiedenabled == 'fixed':
+          unspecifiedwarn = params["levels_unspecified"][1][0]
+          unspecifiedcrit = params["levels_unspecified"][1][1]
+          unspecifiedenabled = 'Enabled'
+    else:
+          unspecifiedwarn = 9999999999999999
+          unspecifiedcrit = 9999999999999999  
+          unspecifiedenabled = 'Disabled'
+          
+    pendingrebootenabled = params["levels_pendingreboot"][0]
+    if pendingrebootenabled == 'fixed':
+          pendingrebootwarn = params["levels_pendingreboot"][1][0]
+          pendingrebootcrit = params["levels_pendingreboot"][1][1]
+          pendingrebootenabled = 'Enabled'
+    else:
+          pendingrebootwarn = 9999999999999999
+          pendingrebootcrit = 9999999999999999
+          pendingrebootenabled = 'Disabled'
 
     for line in section:
         if len(line) < 21:
@@ -182,7 +247,7 @@ def check_windows_updates_kpc(item, params, section):
              statemoderate = " (CRIT)"
         if int(Lowcount) >= int(lowwarn):
              statelow = " (WARN)"
-        if int(Lowcount) >= lowcrit:
+        if int(Lowcount) >= int(lowcrit):
              statelow = " (CRIT)"
         if int(Unspecifiedcount) >= int(unspecifiedwarn):
              stateunspecified = " (WARN)"
@@ -222,7 +287,7 @@ def check_windows_updates_kpc(item, params, section):
              state = State.CRIT
         if int(Lowcount) >= int(lowwarn) and state != State.CRIT and lowenabled == 'Enabled':
              state = State.WARN
-        if int(Lowcount) >= lowcrit and lowenabled == 'Enabled':
+        if int(Lowcount) >= int(lowcrit) and lowenabled == 'Enabled':
              state = State.CRIT
         if int(Unspecifiedcount) >= int(unspecifiedwarn) and state != State.CRIT and unspecifiedenabled == 'Enabled':
              state = State.WARN
@@ -300,11 +365,23 @@ def check_windows_updates_kpc(item, params, section):
              summary=f"{summarytext}",
              details = summarydetails )
 
-register.check_plugin(
+
+check_plugin_kpc_ibmi_asp_utilization = CheckPlugin(
     name = "windows_updates_kpc",
+    sections = [ "windows_updates_kpc" ],
     service_name = "%s",
     discovery_function = discover_windows_updates_kpc,
     check_function = check_windows_updates_kpc,
-    check_default_parameters={'levels_important1' : (1,1,'Enabled'),'levels_optional' : (1,99,'Enabled'),'levels_mandatory' : (1,1,'Disabled'),'levels_critical' : (1,1,'Disabled'),'levels_important' : (1,6,'Disabled'),'levels_moderate' : (1,10,'Disabled'),'levels_low' : (1,99,'Disabled'),'levels_unspecified' : (1,99,'Disabled'),'levels_pendingreboot' : (48,96,'Enabled')},
+    check_default_parameters={
+     "levels_important1": ('fixed', (1, 1)),
+     "levels_optional": ('fixed', (1, 99)),
+     "levels_mandatory": ('fixed', (1, 1)),
+     "levels_critical": ('fixed', (1, 1)),
+     "levels_important": ('fixed', (1, 6)),
+     "levels_moderate": ('fixed', (1, 10)),
+     "levels_low": ('fixed', (1, 99)),
+     "levels_unspecified": ('fixed', (1, 99)),
+     "levels_pendingreboot": ('fixed', (48, 96)),
+    },
     check_ruleset_name="windows_updates_kpc_windows_updates",
 )
