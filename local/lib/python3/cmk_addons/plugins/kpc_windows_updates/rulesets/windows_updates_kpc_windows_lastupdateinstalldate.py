@@ -68,6 +68,6 @@ rule_spec_windows_updates_kpc_windows_lastupdateinstalldate = CheckParameters(
     name="windows_updates_kpc_windows_lastupdateinstalldate",
     topic=Topic.WINDOWS,
     parameter_form=_parameter_form_windows_updates_kpc_windows_lastupdateinstalldate,
-    title=Title("Windows Updates Last Updates installed days ago"),
+    title=Title("Windows Updates History"),
     condition=HostCondition(),
 )

@@ -73,7 +73,7 @@ def _parameter_valuespec_windows_updates_kpc() -> Dictionary:
             ),
             "levels_mandatory": DictElement[SimpleLevelsConfigModel[int]](
                 parameter_form=SimpleLevels(
-                    title=Title("Levels for pending updates with critical severity"),
+                    title=Title("Levels for pending updates with mandatory severity"),
                     level_direction=LevelDirection.UPPER,
                     form_spec_template=Integer(),
                     prefill_levels_type=DefaultValue(LevelsType.FIXED),
